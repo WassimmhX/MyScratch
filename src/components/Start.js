@@ -106,7 +106,7 @@ function Start({ color, cmpList }) {
           
               item.type==="BlockIf"? (<BlockIf key={index}/>)
             : item.type==="BlockIfElse"?  <BlockIfElse key={index}/>
-            : item.type==="BlockFor"?  <BlockFor key={index} nbIfStart={()=>{setNbIf((n)=>n+1);}} />
+            : item.type==="BlockFor"?  <BlockFor key={index} nbIfStart={()=>{setNbIf((n)=>n+1);}} nbIfElseStart={()=>{setNbIfElse((n)=>n+1);}} />
             : (<Cmp key={index} />)
         )}
         <div ref={drop} style={{height:"29px"}}></div>
