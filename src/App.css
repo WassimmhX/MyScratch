@@ -1,0 +1,66 @@
+.App{
+    text-align: center;
+    width: 100vw;
+    height: 100vh;
+  }
+  .Pictures{
+    margin: 10px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+  }
+  img{
+    margin: 5px;
+  }
+  .Board{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    justify-items: left;
+    background-color: blue;
+    border: 2px solid black;
+    border-radius: 8px;
+  }
+  main{
+    display: flex;
+     justify-content: 
+     space-between; 
+     border: 1px solid black; 
+     padding: 10px;
+  }
+  .container{
+    position: relative;
+    border: 1px solid black;
+    height: 2550px;
+    width: 1000px; 
+    overflow: hidden;
+  }
+  .box{
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 60px;
+    width: 60px;
+    cursor: pointer;
+  }
+
+  .input {
+    width: 40px;
+    height: 25px;
+    font-size: 18px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .select {
+    width: 40px;
+    height: 25px;
+    font-size: 18px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 5px;
+  }
+  
