@@ -42,7 +42,7 @@ function Start({ color, cmpList }) {
       setNbIfElse((n) => n + 1);
       addBlockIfToBoard(item);
     } else if (item.type === 'BlockFor') {
-      setGlobalVariable((code) => code + '\n' + 'for i in');
+      setGlobalVariable((code) => code + '\n' + 'for');
       setNbFor((n) => n + 1);
       addBlockIfToBoard(item);
     } else if (item.type === 'image') {

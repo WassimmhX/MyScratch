@@ -28,6 +28,11 @@ function Operation() {
       setGlobalVariable((g)=>g+n2+") ")
     }
     },[n2])
+  useEffect(()=>{
+    if (n1!=""){
+      setGlobalVariable((g)=>g+selectedValue)
+    }
+  },[selectedValue])
   return (
     <div ref={drag} className='Board' style={{padding:5}}>
       <input

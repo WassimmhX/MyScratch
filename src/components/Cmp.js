@@ -13,10 +13,13 @@ function Cmp() {
   }));
   const { globalVariable, setGlobalVariable } = useContext(GlobalContext);
   const[line,setLine]=useState("")
-  
+  const [submittedValue, setSubmittedValue] = useState('');
+  const handleBlur = (e) => {
+    setSubmittedValue(e.target.value); // Save the value when focus is lost
+  };
   useEffect(()=>{
-    setGlobalVariable((g)=>g+line+"\t")
-  },[line])
+    setGlobalVariable((g)=>g+submittedValue+"\t")
+  },[submittedValue])
   return (
     <div
       ref={drag}
@@ -29,7 +32,7 @@ function Cmp() {
       }}
     >
       print (
-      <input value={line} onChange={(e)=>{setLine(e.target.value)}} style={{
+      <input value={line} onChange={(e)=>{setLine(e.target.value)}} onBlur={handleBlur} style={{
         width: '100px',
       }}/> )
     </div>
