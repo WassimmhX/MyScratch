@@ -13,8 +13,9 @@ function Cmp() {
   }));
   const { globalVariable, setGlobalVariable } = useContext(GlobalContext);
   const[line,setLine]=useState("")
+  
   useEffect(()=>{
-    setGlobalVariable((g)=>g+line+"\n")
+    setGlobalVariable((g)=>g+line+"\t")
   },[line])
   return (
     <div

@@ -1,50 +1,57 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import Operation from './Operation';
 import Cmp from './Cmp';
 import BlockIfElse from './BlockIfElse';
 import { GlobalContext } from '../GlobalProvider';
+import Variable from './Variable';
 
-function BlockIf({addCode}) {
-  
+function BlockIf({ addCode, nbImgStart, nbVarStart }) {
   const [boardIf, setBoardIf] = useState([]);
   const [boardThen, setBoardThen] = useState([]);
   const [nbIf, setNbIf] = useState(0);
-  const [nbThen, setNbThen] = useState(0);
+  const [nbImg, setNbImg] = useState(0);
+  const [nbVar, setNbVar] = useState(0);
   const { globalVariable, setGlobalVariable } = useContext(GlobalContext);
 
   const [{ isOver: isOverIf }, dropIf] = useDrop(() => ({
-      accept: ['operation'],
-      drop: (item) => addOpToBoard(item, 'if'),
-      collect: (monitor) => ({ isOver: !!monitor.isOver() }),
-    }));
+    accept: ['operation'],
+    drop: (item) => addOpToBoard(item, 'condition'),
+    collect: (monitor) => ({ isOver: !!monitor.isOver() }),
+  }));
   const [{ isOver: isOverThen }, dropThen] = useDrop(() => ({
-      accept: ['image'],
-      drop: (item) => addOpToBoard(item, 'then'),
-      collect: (monitor) => ({ isOver: !!monitor.isOver() }),
-    }));
+    accept: ['image', 'variable'],
+    drop: (item) => addOpToBoard(item, 'then'),
+    collect: (monitor) => ({ isOver: !!monitor.isOver() }),
+  }));
   const addOpToBoard = (item, boardType) => {
-    if (boardType === 'if') {
-      setGlobalVariable((g)=>g+'if:\n')
+    if (boardType === 'condition') {
+      setGlobalVariable((g) => g + '(');
       setBoardIf((prevBoard) => [...prevBoard, item]);
       setNbIf((nb) => nb + 1);
-    }
-    else if (boardType === 'then') {
-      setGlobalVariable((g)=>g+'then:\n'+'\nprint:')
+    } else if (boardType === 'then') {
+      if (item.type === 'image') {
+        nbImgStart();
+        setGlobalVariable((g) => g + ' then:\n' + '\tprint:');
+        setNbImg((nb) => nb + 1);
+      } else if (item.type === 'variable') {
+        nbVarStart();
+        setGlobalVariable((g) => g + ' then:\n' + '\tprint:');
+        setNbVar((nb) => nb + 1);
+
+      }
       setBoardThen((prevBoard) => [...prevBoard, item]);
-      setNbThen((nb) => nb + 1);
-    };
-  }
+    }
+  };
   const [{ isDragging }, drag] = useDrag(() => ({
-      type: 'BlockIf',
-      item: { type: 'BlockIf'},
-      collect: (monitor) => ({
-        isDragging: !!monitor.isDragging(),
-      }),
+    type: 'BlockIf',
+    item: { type: 'BlockIf' },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
   }));
   const boardHeightIf = boardIf.length === 0 ? 48 : boardIf.length * 48;
-  const boardHeightThen =boardThen.length === 0 ? 29 :  (boardThen.length) * 29;
-
+  const boardHeightThen = boardThen.length === 0 ? 29 : nbImg * 29 + nbVar * 75;
 
   return (
     <div
@@ -53,7 +60,7 @@ function BlockIf({addCode}) {
       style={{
         opacity: isDragging ? 0.5 : 1,
         height: `${boardHeightIf + boardHeightThen + 20}px`,
-        backgroundColor: "green",
+        backgroundColor: 'green',
         width: '280px',
         border: '2px solid black',
         position: 'relative',
@@ -127,12 +134,16 @@ function BlockIf({addCode}) {
           justifyContent: 'flex-start',
         }}
       >
-        {boardThen.map((item,index) => (
-          <Cmp key={item.id} text={item.text} id={item.id}/>
-        ))}
+        {boardThen.map((item, index) =>
+          item.type === 'variable' ? (
+            <Variable key={index} />
+          ) : (
+            <Cmp key={item.id} text={item.text} id={item.id} />
+          )
+        )}
       </div>
     </div>
   );
 }
 
-export default BlockIf
+export default BlockIf;

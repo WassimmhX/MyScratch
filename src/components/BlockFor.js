@@ -5,7 +5,9 @@ import Cmp from './Cmp';
 import { useDrag, useDrop } from 'react-dnd';
 import { GlobalContext } from '../GlobalProvider';
 
-function BlockFor({nbIfStart}) {
+function BlockFor({nbIfStart, nbIfElseStart, nbImgStart, nbForStart}) {
+  const alphabets = Array.from({ length: 26}, (_, i) => String.fromCharCode(65 + i));
+
     const [boardFor, setBoardFor] = useState([]);
     const [nbFor, setNbFor] = useState(0);
     const [nbIf, setNbIf] = useState(0);
@@ -23,21 +25,24 @@ function BlockFor({nbIfStart}) {
     const addToBoard = (item) => {
         setGlobalVariable((g)=>g+'do:\n')
     if(item.type==='BlockIf'){
-        setGlobalVariable((g)=>g+'if\n')
+        setGlobalVariable((g)=>g+'\tif')
         setNbIf((nb) => nb + 1);
         nbIfStart()
     }
     else if(item.type==='BlockIfElse'){
         setGlobalVariable((g)=>g+'if\n')
         setNbIfElse((nb) => nb + 1);
+        nbIfElseStart()
     }
     else if(item.type==='BlockFor'){
         setGlobalVariable((g)=>g+'for\n')
         setNbFor((nb) => nb + 1);
+        nbForStart()
     }
     else if(item.type==='image'){
         setGlobalVariable((g)=>g+'print:\n')
         setNbImg((nb) => nb + 1);
+        nbImgStart()
     }
         setBoardFor((prevBoard) => [...prevBoard, item]);
     }
@@ -55,12 +60,12 @@ function BlockFor({nbIfStart}) {
     },[nbIf,nbIfElse,nbFor,nbImg])
     useEffect(()=>{
         if(n1!=""){
-        setGlobalVariable((g)=>g+n1+"\n")
+        setGlobalVariable((g)=>g+" ("+n1+",")
         }
         },[n1])
     useEffect(()=>{
         if(n2!=""){
-        setGlobalVariable((g)=>g+n2+"\n")
+        setGlobalVariable((g)=>g+n2+")")
         }
     },[n2])
       return (
@@ -96,7 +101,18 @@ function BlockFor({nbIfStart}) {
                 fontWeight: 'bold',
               }}
             >
-              for i in {'('}
+              for {
+                <select
+                className={'select'}
+              >
+                {
+                  alphabets.map(lettre => (
+                    <option key={lettre} value={lettre}>{lettre}</option>
+                  ))
+                }
+                
+              </select>
+              } in {'('}
             </div>
   
             <div

@@ -8,6 +8,7 @@ import Operation from './Operation';
 import BlockIf from './BlockIf';
 import BlockIfElse from './BlockIfElse';
 import BlockFor from './BlockFor';
+import Variable from './Variable';
 
 const CmpList = [
   { id: 1, text: 'print' },
@@ -77,6 +78,7 @@ function DragDrop() {
         <BlockIfElse help={0} />
         <BlockFor/>
         <Operation/>
+        <Variable/>
       </div>
     </main>
   );
