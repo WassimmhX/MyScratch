@@ -6,7 +6,14 @@ import { GlobalContext } from '../GlobalProvider';
 function Operation() {
 
   const[selectedValue, setSelectedValue] = useState('');
-  
+  const [submittedValue1, setSubmittedValue1] = useState('');
+  const handleBlur1 = (e) => {
+    setSubmittedValue1(e.target.value); // Save the value when focus is lost
+  };
+  const [submittedValue2, setSubmittedValue2] = useState('');
+  const handleBlur2 = (e) => {
+    setSubmittedValue2(e.target.value); // Save the value when focus is lost
+  };
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'operation',
     item: { type:'operation' ,op:{selectedValue} },
@@ -19,15 +26,15 @@ function Operation() {
   const[n1,setN1]=useState('')
   const[n2,setN2]=useState('')
   useEffect(()=>{
-    if(n1!=""){
-      setGlobalVariable((g)=>g+n1)
+    if(submittedValue1!=""){
+      setGlobalVariable((g)=>g+submittedValue1)
     }
-    },[n1])
+    },[submittedValue1])
   useEffect(()=>{
-    if(n2!=""){
-      setGlobalVariable((g)=>g+n2+") ")
+    if(submittedValue2!=""){
+      setGlobalVariable((g)=>g+submittedValue2+") ")
     }
-    },[n2])
+    },[submittedValue2])
   useEffect(()=>{
     if (n1!=""){
       setGlobalVariable((g)=>g+selectedValue)
@@ -36,11 +43,12 @@ function Operation() {
   return (
     <div ref={drag} className='Board' style={{padding:5}}>
       <input
-        onChange={(e)=>setN1(e.target.value)} className={'input'}
+        onChange={(e)=>setN1(e.target.value)} className={'input'} onBlur={handleBlur1}
       />
       <select
         className={'select'} value={selectedValue} onChange={(e)=>setSelectedValue(e.target.value)}
       >
+        <option value=""></option>
         <option value="+">+</option>
         <option value="-">-</option>
         <option value="*">*</option>
@@ -53,7 +61,7 @@ function Operation() {
         <option value="!=">{'!='}</option>
       </select>
       <input
-        onChange={(e)=>setN2(e.target.value)} className={'input'}
+        onChange={(e)=>setN2(e.target.value)} onBlur={handleBlur2} className={'input'}
       />
     </div>
   );

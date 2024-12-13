@@ -62,7 +62,7 @@ function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart }) {
   }));
   useEffect(() => {
     if (nbIf + nbIfElse + nbFor + nbImg != 0) {
-      setBoardHeightFor(nbIf * 120 + nbIfElse * 180 + nbFor * 102 + nbImg * 29);
+      setBoardHeightFor(nbIf * 117 + nbIfElse * 180 + nbFor * 102 + nbImg * 29);
     }
   }, [nbIf, nbIfElse, nbFor, nbImg]);
   useEffect(() => {
@@ -230,7 +230,7 @@ function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart }) {
             <Cmp key={index} text={item.text} id={item.id} type="image" />
           )
         )}
-        <div ref={dropFor} style={{ height: '29px', width: '150px' }}></div>
+        <div ref={dropFor} style={{ height: '29px', width: '150px',color:'purple'}}>'</div>
       </div>
     </div>
   );

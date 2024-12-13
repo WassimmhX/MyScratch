@@ -1,17 +1,21 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import Operation from './Operation';
 import Cmp from './Cmp';
 import BlockIf from './BlockIf';
 import { GlobalContext } from '../GlobalProvider';
+import Variable from './Variable';
 
 function BlockIfElse({ nbImgStart, nbIfStart, nbIfElseStart, nbVarStart }) {
   const [boardIf, setBoardIf] = useState([]);
   const [boardThen, setBoardThen] = useState([]);
   const [boardElse, setBoardElse] = useState([]);
 
-  const [nbImg, setNbImg] = useState(0);
+  const [nbImgIf, setNbImgIf] = useState(0);
+  const [nbImgElse, setNbImgElse] = useState(0);
   const [nbIfElse, setNbIfElse] = useState(0);
+  const [nbVarIf, setNbVarIf] = useState(0);
+  const [nbVarElse, setNbVarElse] = useState(0);
 
   const [nbIf, setNbIf] = useState(0);
 
@@ -25,41 +29,48 @@ function BlockIfElse({ nbImgStart, nbIfStart, nbIfElseStart, nbVarStart }) {
     collect: (monitor) => ({ isOver: !!monitor.isOver() }),
   }));
   const [{ isOver: isOverThen }, dropThen] = useDrop(() => ({
-    accept: 'image',
-    drop: (item) => addToBoard(item.id, 'then'),
+    accept: ['image','variable'],
+    drop: (item) => addToBoard(item, 'then'),
     collect: (monitor) => ({ isOver: !!monitor.isOver() }),
   }));
   const [{ isOver: isOverElse }, dropElse] = useDrop(() => ({
-    accept: ['image', 'BlockIf', 'BlockIfElse'],
+    accept: ['image', 'BlockIf', 'BlockIfElse','variable'],
     drop: (item) => addToBoard(item, 'else'),
     collect: (monitor) => ({ isOver: !!monitor.isOver() }),
   }));
 
   const addToBoard = (item, boardType) => {
     if (boardType === 'if') {
-      setGlobalVariable((g) => g + '\ncondition: (');
+      setGlobalVariable((g) => g + '(');
       setBoardIf((prevBoard) => [...prevBoard, item]);
       // setNbIf((nb) => nb + 1);
     } else if (boardType === 'then') {
       if (item.type === 'variable') {
         nbVarStart();
-        setGlobalVariable((g) => g + 'Donnes de variable');
+        setNbVarIf((nb)=>nb+1)
+        setGlobalVariable((g) => g + 'then:\n\t');
       } else {
+        setNbImgIf((nb)=>nb+1)
         setGlobalVariable((g) => g + 'then\n\tprint:');
-        nbImgStart();
       }
       setBoardThen((prevBoard) => [...prevBoard, item]);
       setNbThen((nb) => nb + 1);
-    } else if (boardType === 'else') {
+    } 
+    else if (boardType === 'else') {
       if (item.type === 'image') {
         setGlobalVariable((g) => g + '\nelse:\n\tprint:');
-        setNbImg((n) => n + 1);
-        nbImgStart();
-      } else {
+        setNbImgElse((n) => n + 1);
+      } 
+      else if(item.type=="variable"){
+        nbVarStart();
+        setNbVarElse((nb)=>nb+1)
+        setGlobalVariable((g) => g + 'else:\n\t');
+      }
+      else {
         setGlobalVariable((g) => g + '\nelse: if:');
         if (item.type === 'BlockIf') {
-          nbIfStart();
           setNbIf((nb) => nb + 1);
+          nbIfStart();
         } else if (item.type === 'BlockIfElse') {
           setNbIfElse((nb) => nb + 1);
           nbIfElseStart();
@@ -77,11 +88,19 @@ function BlockIfElse({ nbImgStart, nbIfStart, nbIfElseStart, nbVarStart }) {
       isDragging: !!monitor.isDragging(),
     }),
   }));
-
+  useEffect(()=>{
+    if(nbImgElse>1){
+      nbImgStart()
+    }
+  },[nbImgElse])
+  useEffect(()=>{
+    if(nbImgIf>1){
+      nbImgStart()
+    }
+  },[nbImgIf])
   const boardHeightIf = boardIf.length === 0 ? 48 : boardIf.length * 48;
-  const boardHeightThen = boardThen.length === 0 ? 29 : boardThen.length * 29;
-  const boardHeightElse =
-    boardElse.length === 0 ? 29 : nbImg * 29 + nbIf * 120 + nbIfElse * 180;
+  const boardHeightThen = boardThen.length === 0 ? 29 : nbImgIf * 29 + nbVarIf * 75;
+  const boardHeightElse =boardElse.length === 0 ? 29 : nbImgElse * 29 + nbIf * 120 + nbIfElse * 180 + nbVarElse * 75;
   return (
     <div
       ref={drag}
@@ -164,8 +183,8 @@ function BlockIfElse({ nbImgStart, nbIfStart, nbIfElseStart, nbVarStart }) {
           marginTop: 5,
         }}
       >
-        {boardThen.map((picture, index) => (
-          <Cmp key={index} />
+        {boardThen.map((item, index) => (
+          item.type==='variable'?<Variable key={index} />: <Cmp key={index} />
         ))}
       </div>
 
@@ -202,13 +221,10 @@ function BlockIfElse({ nbImgStart, nbIfStart, nbIfElseStart, nbVarStart }) {
           }}
         >
           {boardElse.map((item, index) =>
-            item.type === 'BlockIf' ? (
-              <BlockIf key={index} />
-            ) : item.type === 'BlockIfElse' ? (
-              <BlockIfElse key={index} />
-            ) : (
-              <Cmp key={item.id} text={item.text} id={item.id} />
-            )
+             item.type === 'BlockIf' ? (<BlockIf key={index} />) 
+            :item.type === 'BlockIfElse' ? (<BlockIfElse key={index} />) 
+            :item.type === 'variable' ? (<Variable key={index} />) 
+            : (<Cmp key={index} />)
           )}
         </div>
       </div>

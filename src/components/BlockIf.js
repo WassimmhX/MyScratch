@@ -138,7 +138,7 @@ function BlockIf({ addCode, nbImgStart, nbVarStart }) {
           item.type === 'variable' ? (
             <Variable key={index} />
           ) : (
-            <Cmp key={item.id} text={item.text} id={item.id} />
+            <Cmp key={index} />
           )
         )}
       </div>
