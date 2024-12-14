@@ -90,10 +90,10 @@ function BlockIfElse({ nbImgStart, nbIfStart, nbIfElseStart, nbVarStart }) {
   }, [nbImgElse, nbVarElse ]);
   useEffect(() => {
     if(nbIf+nbIfElse===1){
-      setGlobalVariable((g) => g + '\n\telse :')
+      setGlobalVariable((g) => g + '\nelse :')
     }
     if (nbIfElse + nbIf != 0) {
-    setGlobalVariable((g) => g + '\n\t\tif:');
+    setGlobalVariable((g) => g + '\n\tif:');
     }
   }, [nbIfElse, nbIf]);
 

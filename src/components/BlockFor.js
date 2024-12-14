@@ -35,17 +35,16 @@ function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart, nbVarStart
     collect: (monitor) => ({ isOver: !!monitor.isOver() }),
   }));
   const addToBoard = (item) => {
-    setGlobalVariable((g) => g + ' do :\n\t');
     if (item.type === 'BlockIf') {
-      setGlobalVariable((g) => g + '\tif');
+      setGlobalVariable((g) => g + '\n\tif');
       setNbIf((nb) => nb + 1);
       nbIfStart();
     } else if (item.type === 'BlockIfElse') {
-      setGlobalVariable((g) => g + 'if\n');
+      setGlobalVariable((g) => g + '\n\tif');
       setNbIfElse((nb) => nb + 1);
       nbIfElseStart();
     } else if (item.type === 'BlockFor') {
-      setGlobalVariable((g) => g + 'for\n');
+      setGlobalVariable((g) => g + '\n\for');
       setNbFor((nb) => nb + 1);
       nbForStart();
     } else if (item.type === 'image') {
@@ -84,6 +83,11 @@ function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart, nbVarStart
       setGlobalVariable((g) => g +  iterator + ' in');
     }
   }, [iterator]);
+  useEffect(() => {
+      if (nbImg + nbVar + nbIfElse + nbIf + nbFor === 1) {
+        setGlobalVariable((g) => g + 'do:\n\t');
+      }
+      }, [nbImg, nbVar, nbIfElse, nbIf, nbFor]);
   return (
     <div
       ref={drag}
@@ -224,7 +228,7 @@ function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart, nbVarStart
         }}
       >
         {boardFor.map((item, index) =>
-          item.type === 'BlockIf' ? (<BlockIf key={index} nbImgStart={nbImgStart}/>) 
+          item.type === 'BlockIf' ? (<BlockIf key={index} nbImgStart={nbImgStart} nbVarStart={nbVarStart}/>) 
             : item.type === 'BlockIfElse' ? (<BlockIfElse key={index} />) 
             : item.type === 'BlockFor' ? (<BlockFor key={index} />) 
             : item.type === 'variable' ? (<Variable key={index} />) 
