@@ -4,8 +4,9 @@ import BlockIfElse from './BlockIfElse';
 import Cmp from './Cmp';
 import { useDrag, useDrop } from 'react-dnd';
 import { GlobalContext } from '../GlobalProvider';
+import Variable from './Variable';
 
-function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart }) {
+function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart, nbVarStart }) {
   const alphabets = Array.from({ length: 26 }, (_, i) =>
     String.fromCharCode(65 + i)
   );
@@ -15,6 +16,7 @@ function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart }) {
   const [nbIf, setNbIf] = useState(0);
   const [nbImg, setNbImg] = useState(0);
   const [nbIfElse, setNbIfElse] = useState(0);
+  const [nbVar, setNbVar] = useState(0);
   const { globalVariable, setGlobalVariable } = useContext(GlobalContext);
   const [n1, setN1] = useState('');
   const [n2, setN2] = useState('');
@@ -28,12 +30,12 @@ function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart }) {
   };
   const [boardHeightFor, setBoardHeightFor] = useState(29);
   const [{ isOver: isOverFor }, dropFor] = useDrop(() => ({
-    accept: ['image', 'BlockIf', 'BlockFor', 'BlockIfElse'],
+    accept: ['image', 'BlockIf', 'BlockFor', 'BlockIfElse', 'variable'],
     drop: (item) => addToBoard(item),
     collect: (monitor) => ({ isOver: !!monitor.isOver() }),
   }));
   const addToBoard = (item) => {
-    setGlobalVariable((g) => g + 'do:\n\t');
+    setGlobalVariable((g) => g + ' do :\n\t');
     if (item.type === 'BlockIf') {
       setGlobalVariable((g) => g + '\tif');
       setNbIf((nb) => nb + 1);
@@ -47,9 +49,11 @@ function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart }) {
       setNbFor((nb) => nb + 1);
       nbForStart();
     } else if (item.type === 'image') {
-      setGlobalVariable((g) => g + 'print: ');
       setNbImg((nb) => nb + 1);
       nbImgStart();
+    }else if (item.type === 'variable') {
+      setNbVar((nb) => nb + 1);
+      nbVarStart();
     }
     setBoardFor((prevBoard) => [...prevBoard, item]);
   };
@@ -61,10 +65,10 @@ function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart }) {
     }),
   }));
   useEffect(() => {
-    if (nbIf + nbIfElse + nbFor + nbImg != 0) {
-      setBoardHeightFor(nbIf * 117 + nbIfElse * 180 + nbFor * 102 + nbImg * 29);
+    if (nbIf + nbIfElse + nbFor + nbImg + nbVar !== 0) {
+      setBoardHeightFor(nbIf * 120 + nbIfElse * 180 + nbFor * 105 + nbImg * 29 + nbVar * 80);
     }
-  }, [nbIf, nbIfElse, nbFor, nbImg]);
+  }, [nbIf, nbIfElse, nbFor, nbImg, nbVar]);
   useEffect(() => {
     if (n1 != '') {
       setGlobalVariable((g) => g + ' (' + submittedValue1 + ',');
@@ -77,7 +81,7 @@ function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart }) {
   }, [submittedValue2]);
   useEffect(() => {
     if (iterator != '') {
-      setGlobalVariable((g) => g + ' ' + iterator + ' in ');
+      setGlobalVariable((g) => g +  iterator + ' in');
     }
   }, [iterator]);
   return (
@@ -87,7 +91,7 @@ function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart }) {
       style={{
         opacity: isDragging ? 0.5 : 1,
         height: `${boardHeightFor + 50}px`,
-        backgroundColor: 'blue',
+        backgroundColor: 'SlateBlue',
         width: '280px',
         border: '2px solid black',
         position: 'relative',
@@ -220,15 +224,12 @@ function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart }) {
         }}
       >
         {boardFor.map((item, index) =>
-          item.type === 'BlockIf' ? (
-            <BlockIf key={index} />
-          ) : item.type === 'BlockIfElse' ? (
-            <BlockIfElse key={index} />
-          ) : item.type === 'BlockFor' ? (
-            <BlockFor key={index} />
-          ) : (
-            <Cmp key={index} text={item.text} id={item.id} type="image" />
-          )
+          item.type === 'BlockIf' ? (<BlockIf key={index} nbImgStart={nbImgStart}/>) 
+            : item.type === 'BlockIfElse' ? (<BlockIfElse key={index} />) 
+            : item.type === 'BlockFor' ? (<BlockFor key={index} />) 
+            : item.type === 'variable' ? (<Variable key={index} />) 
+            : <Cmp key={index} text={item.text} id={item.id} type="image" />
+          
         )}
         <div ref={dropFor} style={{ height: '29px', width: '150px',color:'purple'}}>'</div>
       </div>

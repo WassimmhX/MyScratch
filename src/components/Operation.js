@@ -7,6 +7,7 @@ function Operation() {
 
   const[selectedValue, setSelectedValue] = useState('');
   const [submittedValue1, setSubmittedValue1] = useState('');
+  
   const handleBlur1 = (e) => {
     setSubmittedValue1(e.target.value); // Save the value when focus is lost
   };
@@ -27,7 +28,7 @@ function Operation() {
   const[n2,setN2]=useState('')
   useEffect(()=>{
     if(submittedValue1!=""){
-      setGlobalVariable((g)=>g+submittedValue1)
+      setGlobalVariable((g)=>g+'('+submittedValue1)
     }
     },[submittedValue1])
   useEffect(()=>{
@@ -41,7 +42,7 @@ function Operation() {
     }
   },[selectedValue])
   return (
-    <div ref={drag} className='Board' style={{padding:5}}>
+    <div ref={drag} className='Board' style={{padding:5, backgroundColor:'deepSkyBlue'}}>
       <input
         onChange={(e)=>setN1(e.target.value)} className={'input'} onBlur={handleBlur1}
       />
@@ -61,7 +62,7 @@ function Operation() {
         <option value="!=">{'!='}</option>
       </select>
       <input
-        onChange={(e)=>setN2(e.target.value)} onBlur={handleBlur2} className={'input'}
+         onBlur={handleBlur2} className={'input'}
       />
     </div>
   );

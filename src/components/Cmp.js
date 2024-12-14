@@ -18,7 +18,9 @@ function Cmp() {
     setSubmittedValue(e.target.value); // Save the value when focus is lost
   };
   useEffect(()=>{
-    setGlobalVariable((g)=>g+submittedValue+"\t")
+    if(submittedValue!=''){
+      setGlobalVariable((g)=>g+'print:'+submittedValue)
+    }
   },[submittedValue])
   return (
     <div

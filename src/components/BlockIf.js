@@ -9,7 +9,7 @@ import Variable from './Variable';
 function BlockIf({ addCode, nbImgStart, nbVarStart }) {
   const [boardIf, setBoardIf] = useState([]);
   const [boardThen, setBoardThen] = useState([]);
-  const [nbIf, setNbIf] = useState(0);
+
   const [nbImg, setNbImg] = useState(0);
   const [nbVar, setNbVar] = useState(0);
   const { globalVariable, setGlobalVariable } = useContext(GlobalContext);
@@ -26,19 +26,16 @@ function BlockIf({ addCode, nbImgStart, nbVarStart }) {
   }));
   const addOpToBoard = (item, boardType) => {
     if (boardType === 'condition') {
-      setGlobalVariable((g) => g + '(');
       setBoardIf((prevBoard) => [...prevBoard, item]);
-      setNbIf((nb) => nb + 1);
     } else if (boardType === 'then') {
       if (item.type === 'image') {
         nbImgStart();
-        setGlobalVariable((g) => g + ' then:\n' + '\tprint:');
         setNbImg((nb) => nb + 1);
+        setGlobalVariable((g) => g + '\n');
       } else if (item.type === 'variable') {
         nbVarStart();
-        setGlobalVariable((g) => g + ' then:\n' + '\tprint:');
         setNbVar((nb) => nb + 1);
-
+        setGlobalVariable((g) => g + '\n');
       }
       setBoardThen((prevBoard) => [...prevBoard, item]);
     }
@@ -50,6 +47,13 @@ function BlockIf({ addCode, nbImgStart, nbVarStart }) {
       isDragging: !!monitor.isDragging(),
     }),
   }));
+  useEffect(()=>{
+    if (nbImg + nbVar === 1) {
+      setGlobalVariable((g) => g + ' then:\n\t');
+    } else {
+      setGlobalVariable((g) => g + '\t');
+    }
+  },[nbImg,nbVar])
   const boardHeightIf = boardIf.length === 0 ? 48 : boardIf.length * 48;
   const boardHeightThen = boardThen.length === 0 ? 29 : nbImg * 29 + nbVar * 75;
 
@@ -60,7 +64,7 @@ function BlockIf({ addCode, nbImgStart, nbVarStart }) {
       style={{
         opacity: isDragging ? 0.5 : 1,
         height: `${boardHeightIf + boardHeightThen + 20}px`,
-        backgroundColor: 'green',
+        backgroundColor: 'lightgreen',
         width: '280px',
         border: '2px solid black',
         position: 'relative',

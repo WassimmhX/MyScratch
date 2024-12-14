@@ -34,18 +34,19 @@ function Start({ color, cmpList }) {
     if (item.type === 'operaion') {
       addOpToBoard(item);
     } else if (item.type === 'BlockIf') {
-      setGlobalVariable((code) => code + '\n' + 'if');
+      setGlobalVariable((code) => code + '\n' + 'if ');
       setNbIf((n) => n + 1);
       addBlockIfToBoard(item);
     } else if (item.type === 'BlockIfElse') {
-      setGlobalVariable((code) => code + '\n' + 'if');
+      setGlobalVariable((code) => code + '\n' + 'if ');
       setNbIfElse((n) => n + 1);
       addBlockIfToBoard(item);
     } else if (item.type === 'BlockFor') {
-      setGlobalVariable((code) => code + '\n' + 'for');
+      setGlobalVariable((code) => code + '\n' + 'for ');
       setNbFor((n) => n + 1);
       addBlockIfToBoard(item);
     } else if (item.type === 'image') {
+      setGlobalVariable((code) => code +'\n ');
       setNbImg((nbImg) => nbImg + 1);
       addImageToBoard(item);
     } else if (item.type === 'variable') {
@@ -142,6 +143,9 @@ function Start({ color, cmpList }) {
           ) : item.type === 'BlockFor' ? (
             <BlockFor
               key={index}
+              nbVarStart={() => {
+                setNbVar((n) => n + 1);
+              }}
               nbIfStart={() => {
                 setNbIf((n) => n + 1);
               }}

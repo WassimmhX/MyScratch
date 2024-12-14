@@ -5,6 +5,9 @@ import { GlobalContext } from '../GlobalProvider';
 import Operation from './Operation';
 
 function Variable() {
+
+  const[selectedValue, setSelectedValue] = useState('');
+  
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'variable',
     item: { type: 'variable', op: {} },
@@ -12,9 +15,7 @@ function Variable() {
       isDragging: !!monitor.isDragging(),
     }),
   }));
-
-  const [boardVar, setBoardVar] = useState([]);
-
+  
   const alphabets = Array.from({ length: 26 }, (_, i) =>
     String.fromCharCode(65 + i)
   );
@@ -24,11 +25,17 @@ function Variable() {
     drop: (item) => addToBoard(item),
     collect: (monitor) => ({ isOver: !!monitor.isOver() }),
   }));
-
+  
+  const [boardVar, setBoardVar] = useState([]);
   const addToBoard = (item) => {
-    setGlobalVariable((g) => g + 'Donnes de variabe'); // ajouter les donnes de variable a afficher
+    // setGlobalVariable((g) => g + item.op.selectedValue); // ajouter les donnes de variable a afficher
     setBoardVar((prevBoard) => [...prevBoard, item]);
   };
+  useEffect(()=>{
+    if (selectedValue!=''){
+      setGlobalVariable((g)=>g+selectedValue + ' = ')
+    }
+    },[selectedValue])
 
   const { globalVariable, setGlobalVariable } = useContext(GlobalContext);
 
@@ -39,7 +46,7 @@ function Variable() {
       style={{
         opacity: isDragging ? 0.5 : 1,
         height: 'auto',
-        backgroundColor: 'blue',
+        backgroundColor: 'teal',
         width: '245px',
         border: '2px solid black',
         borderRadius: '8px',
@@ -66,7 +73,8 @@ function Variable() {
           }}
         >
           {
-            <select className={'select'}>
+            <select className={'select'} value={selectedValue} onChange={(e)=>setSelectedValue(e.target.value)}>
+              <option value=''></option>
               {alphabets.map((lettre) => (
                 <option key={lettre} value={lettre}>
                   {lettre}
