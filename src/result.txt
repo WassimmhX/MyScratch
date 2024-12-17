@@ -1,9 +1,12 @@
 	
 			
 		
-if 		(5<7) 
+ print(test)
+A = 5
+ print(A)
+
+if 		(A==6) 
  then:
-	print:hello
-if 		(10<2) 
- then:
-	print:wassim
+	print(A=6)
+
+ print("donne")

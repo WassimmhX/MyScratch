@@ -15,7 +15,7 @@ export default function Affect() {
     };
     const [{ isDragging }, drag] = useDrag(() => ({
       type: 'affect',
-      item: { type:'    affect' ,op:{selectedValue} },
+      item: { type:'affect' ,op:{selectedValue} },
        collect: (monitor) => ({
          isDragging: !!monitor.isDragging(),
        }),
@@ -25,7 +25,7 @@ export default function Affect() {
     const[n1,setN1]=useState('')
     useEffect(()=>{
       if(submittedValue1!=""){
-        setGlobalVariable((g)=>g+'('+submittedValue1)
+        setGlobalVariable((g)=>g+submittedValue1)
       }
       },[submittedValue1])
     useEffect(()=>{
@@ -39,9 +39,9 @@ export default function Affect() {
       }
     },[selectedValue])
     return (
-      <div ref={drag} className='Board' style={{padding:5, backgroundColor:'deepSkyBlue'}}>
+      <div ref={drag} className='Board' style={{padding:5, backgroundColor:'deepSkyBlue',width:"150px"}}>
         <input
-          onChange={(e)=>setN1(e.target.value)} className={'input'} onBlur={handleBlur1}
+          onChange={(e)=>setN1(e.target.value)} className={'input'} onBlur={handleBlur1} style={{width:"120px"}}
         />
       </div>
     );

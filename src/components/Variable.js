@@ -101,7 +101,7 @@ function Variable() {
           }}
         >
           {boardVar.map((item, index) => (
-            item.type === 'affect'? (<Operation key={index} />)
+            item.type === 'operation'? (<Operation key={index} />)
             :<Affect key={index}/>)
           )}
         </div>

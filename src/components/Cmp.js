@@ -19,7 +19,7 @@ function Cmp() {
   };
   useEffect(()=>{
     if(submittedValue!=''){
-      setGlobalVariable((g)=>g+'print('+submittedValue+')')
+      setGlobalVariable((g)=>g+'print('+submittedValue+')\n')
     }
   },[submittedValue])
   return (
