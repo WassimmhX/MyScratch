@@ -65,7 +65,7 @@ function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart, nbVarStart
   }));
   useEffect(() => {
     if (nbIf + nbIfElse + nbFor + nbImg + nbVar !== 0) {
-      setBoardHeightFor(nbIf * 120 + nbIfElse * 180 + nbFor * 105 + nbImg * 29 + nbVar * 80);
+      setBoardHeightFor(nbIf * 120 + nbIfElse * 180 + nbFor * 105 + nbImg * 63 + nbVar * 80);
     }
   }, [nbIf, nbIfElse, nbFor, nbImg, nbVar]);
   useEffect(() => {
