@@ -1,3 +1,2 @@
 		
-if (A==True)  then:
-	print(task Done !)
+print(hello)
