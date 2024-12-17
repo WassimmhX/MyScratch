@@ -10,9 +10,7 @@ export default function Affect() {
       setSubmittedValue1(e.target.value); // Save the value when focus is lost
     };
     const [submittedValue2, setSubmittedValue2] = useState('');
-    const handleBlur2 = (e) => {
-      setSubmittedValue2(e.target.value); // Save the value when focus is lost
-    };
+    
     const [{ isDragging }, drag] = useDrag(() => ({
       type: 'affect',
       item: { type:'affect' ,op:{selectedValue} },

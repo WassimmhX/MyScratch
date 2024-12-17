@@ -44,15 +44,17 @@ function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart, nbVarStart
       setNbIfElse((nb) => nb + 1);
       nbIfElseStart();
     } else if (item.type === 'BlockFor') {
-      setGlobalVariable((g) => g + '\n\for');
+      setGlobalVariable((g) => g + '\n\tfor');
       setNbFor((nb) => nb + 1);
       nbForStart();
     } else if (item.type === 'image') {
       setNbImg((nb) => nb + 1);
       nbImgStart();
+      setGlobalVariable((g) => g + '\n\t');
     }else if (item.type === 'variable') {
       setNbVar((nb) => nb + 1);
       nbVarStart();
+      setGlobalVariable((g) => g + '\n\t');
     }
     setBoardFor((prevBoard) => [...prevBoard, item]);
   };
@@ -65,7 +67,7 @@ function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart, nbVarStart
   }));
   useEffect(() => {
     if (nbIf + nbIfElse + nbFor + nbImg + nbVar !== 0) {
-      setBoardHeightFor(nbIf * 120 + nbIfElse * 180 + nbFor * 105 + nbImg * 63 + nbVar * 80);
+      setBoardHeightFor(nbIf * 120 + nbIfElse * 180 + nbFor * 108 + nbImg * 65 + nbVar * 80);
     }
   }, [nbIf, nbIfElse, nbFor, nbImg, nbVar]);
   useEffect(() => {
@@ -75,7 +77,7 @@ function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart, nbVarStart
   }, [submittedValue1]);
   useEffect(() => {
     if (n2 != '') {
-      setGlobalVariable((g) => g + submittedValue2 + ')');
+      setGlobalVariable((g) => g + submittedValue2 + ') do:\n\t');
     }
   }, [submittedValue2]);
   useEffect(() => {
@@ -83,11 +85,7 @@ function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart, nbVarStart
       setGlobalVariable((g) => g +  iterator + ' in');
     }
   }, [iterator]);
-  useEffect(() => {
-      if (nbImg + nbVar + nbIfElse + nbIf + nbFor === 1) {
-        setGlobalVariable((g) => g + 'do:\n\t');
-      }
-      }, [nbImg, nbVar, nbIfElse, nbIf, nbFor]);
+  
   return (
     <div
       ref={drag}
@@ -229,8 +227,8 @@ function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart, nbVarStart
       >
         {boardFor.map((item, index) =>
           item.type === 'BlockIf' ? (<BlockIf key={index} nbImgStart={nbImgStart} nbVarStart={nbVarStart}/>) 
-            : item.type === 'BlockIfElse' ? (<BlockIfElse key={index} />) 
-            : item.type === 'BlockFor' ? (<BlockFor key={index} />) 
+            : item.type === 'BlockIfElse' ? (<BlockIfElse key={index} nbVarStart={nbVarStart} />) 
+            : item.type === 'BlockFor' ? (<BlockFor key={index} nbIfStart={nbIfStart} nbImgStart={nbImgStart} />) 
             : item.type === 'variable' ? (<Variable key={index} />) 
             : <Cmp key={index} text={item.text} id={item.id} type="image" />
           

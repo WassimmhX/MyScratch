@@ -1,9 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import Cmp from './Cmp';
 import '../App.css';
-import DropBox from './DropBox';
 import Start from './Start';
-import { useDrag } from 'react-dnd';
 import Operation from './Operation';
 import BlockIf from './BlockIf';
 import BlockIfElse from './BlockIfElse';
@@ -13,20 +11,45 @@ import axios from 'axios';
 import { GlobalContext } from '../GlobalProvider';
 import Affect from './Affect';
 
-const filePath="C:/Users/Mega-PC/Desktop/informatique/compilation/projet/myScratchProject/src/result.txt"
-const pythonPath="C:/Users/Mega-PC/Desktop/informatique/compilation/projet/myScratchProject/src/main.py"
+const filePath="../src/result.txt"
+const pythonPath="../src/main.py"
+
 function DragDrop() {
   const [fileContent,setFileContent] = useState("")
   const { globalVariable, setGlobalVariable } = useContext(GlobalContext);
   const boxRef = useRef(null);
   const containerRef = useRef(null);
   const isClicked = useRef(false);
+  
   const coords = useRef({
     startX: 0,
     startY: 0,
     lastX: 0,
     lastY: 0,
   });
+
+  
+  const btnSave = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/update-file', {
+        filePath,
+        newContent:globalVariable,
+      });
+      console.log(response.data.message);
+    } catch (error) {
+      console.error('Error fetching file:', error);
+      setFileContent('Error reading file. Please check the path.');
+    }
+  };
+  const compile = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/run-python', { filePath:pythonPath });
+      console.log(response.data.output);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
 
   useEffect(() => {
     if (!boxRef.current || !containerRef.current) return;
@@ -59,27 +82,8 @@ function DragDrop() {
     };
     return cleanup;
   }, []);
-  const btn = async () => {
-    try {
-      
-      const response = await axios.post('http://localhost:5000/update-file', {
-        filePath,
-        newContent:globalVariable,
-      });
-      console.log(response.data.message);
-    } catch (error) {
-      console.error('Error fetching file:', error);
-      setFileContent('Error reading file. Please check the path.');
-    }
-  };
-  const compile = async () => {
-    try {
-      const response = await axios.post('http://localhost:5000/run-python', { filePath:pythonPath });
-      console.log(response.data.output);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+
+
   return (
     <main>
       <div className="container" ref={containerRef}>
@@ -103,8 +107,11 @@ function DragDrop() {
         <Operation/>
         <Variable/>
         <Affect/>
-        <button onClick={btn}>Save</button>
+        <button onClick={btnSave}>Save</button>
         <button onClick={compile}>Compile</button>
+      </div>
+      <div style={{padding:'10px',}}>
+        {}
       </div>
     </main>
   );

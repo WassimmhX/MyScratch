@@ -46,10 +46,11 @@ function Start({ color}) {
       setNbFor((n) => n + 1);
       addBlockIfToBoard(item);
     } else if (item.type === 'image') {
-      setGlobalVariable((code) => code +'\n ');
+      setGlobalVariable((code) => code +'\n');
       setNbImg((nbImg) => nbImg + 1);
       addImageToBoard(item);
     } else if (item.type === 'variable') {
+      setGlobalVariable((code) => code +'\n');
       setNbVar((nbVar) => nbVar + 1);
       addVariableToBoard(item);
     }

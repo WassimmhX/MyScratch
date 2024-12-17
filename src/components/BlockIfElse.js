@@ -46,7 +46,7 @@ function BlockIfElse({ nbImgStart, nbIfStart, nbIfElseStart, nbVarStart }) {
       if (item.type === 'variable') {
         nbVarStart();
         setNbVarThen((nb) => nb + 1);
-        setGlobalVariable((g) => g + '\n');
+        // setGlobalVariable((g) => g + '\n');
       } else if (item.type === 'image') {
         setNbImgIf((nb) => nb + 1);
       }
@@ -77,7 +77,7 @@ function BlockIfElse({ nbImgStart, nbIfStart, nbIfElseStart, nbVarStart }) {
   useEffect(() => {
     if (nbImgIf + nbVarThen === 1) {
       setGlobalVariable((g) => g + 'then:\n\t');
-    } else {
+    } else if (nbImgIf + nbVarThen > 1) {
       setGlobalVariable((g) => g + '\n\t');
     }
   }, [nbImgIf, nbVarThen]);

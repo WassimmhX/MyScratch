@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import Operation from './Operation';
 import Cmp from './Cmp';
-import BlockIfElse from './BlockIfElse';
 import { GlobalContext } from '../GlobalProvider';
 import Variable from './Variable';
 
@@ -31,11 +30,9 @@ function BlockIf({ addCode, nbImgStart, nbVarStart }) {
       if (item.type === 'image') {
         nbImgStart();
         setNbImg((nb) => nb + 1);
-        setGlobalVariable((g) => g + '\n');
       } else if (item.type === 'variable') {
         nbVarStart();
         setNbVar((nb) => nb + 1);
-        setGlobalVariable((g) => g + '\n');
       }
       setBoardThen((prevBoard) => [...prevBoard, item]);
     }
@@ -50,8 +47,8 @@ function BlockIf({ addCode, nbImgStart, nbVarStart }) {
   useEffect(()=>{
     if (nbImg + nbVar === 1) {
       setGlobalVariable((g) => g + ' then:\n\t');
-    } else {
-      setGlobalVariable((g) => g + '\t');
+    } else if (nbImg + nbVar > 1) {
+      setGlobalVariable((g) => g + '\n\t');
     }
   },[nbImg,nbVar])
   const boardHeightIf = boardIf.length === 0 ? 48 : boardIf.length * 48;
