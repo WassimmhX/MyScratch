@@ -1,3 +1,4 @@
 		
-if (A==True)  then:
-	print(task Done !)
+if (P==True)  then:
+	M = (5+5) 
+	print(done !)

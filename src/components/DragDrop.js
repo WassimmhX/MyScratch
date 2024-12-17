@@ -11,16 +11,17 @@ import axios from 'axios';
 import { GlobalContext } from '../GlobalProvider';
 import Affect from './Affect';
 
-const filePath="../src/result.txt"
-const pythonPath="../src/main.py"
+const filePath = '../src/result.txt';
+const pythonPath = '../src/main.py';
 
 function DragDrop() {
-  const [fileContent,setFileContent] = useState("")
+  const [fileContent, setFileContent] = useState('');
+  const [outPut, setOutPut] = useState();
   const { globalVariable, setGlobalVariable } = useContext(GlobalContext);
   const boxRef = useRef(null);
   const containerRef = useRef(null);
   const isClicked = useRef(false);
-  
+
   const coords = useRef({
     startX: 0,
     startY: 0,
@@ -28,12 +29,11 @@ function DragDrop() {
     lastY: 0,
   });
 
-  
   const btnSave = async () => {
     try {
       const response = await axios.post('http://localhost:5000/update-file', {
         filePath,
-        newContent:globalVariable,
+        newContent: globalVariable,
       });
       console.log(response.data.message);
     } catch (error) {
@@ -43,13 +43,15 @@ function DragDrop() {
   };
   const compile = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/run-python', { filePath:pythonPath });
+      const response = await axios.post('http://localhost:5000/run-python', {
+        filePath: pythonPath,
+      });
+      setOutPut(response.data.output);
       console.log(response.data.output);
     } catch (err) {
       console.error(err);
     }
   };
-
 
   useEffect(() => {
     if (!boxRef.current || !containerRef.current) return;
@@ -83,11 +85,10 @@ function DragDrop() {
     return cleanup;
   }, []);
 
-
   return (
     <main>
       <div className="container" ref={containerRef}>
-        <div ref={boxRef} className="box" >
+        <div ref={boxRef} className="box">
           <Start color="red" />
         </div>
       </div>
@@ -103,15 +104,25 @@ function DragDrop() {
         <Cmp />
         <BlockIf help={0} />
         <BlockIfElse help={0} />
-        <BlockFor/>
-        <Operation/>
-        <Variable/>
-        <Affect/>
+        <BlockFor />
+        <Operation />
+        <Variable />
+        <Affect />
         <button onClick={btnSave}>Save</button>
         <button onClick={compile}>Compile</button>
-      </div>
-      <div style={{padding:'10px',}}>
-        {}
+        <div
+          className="container"
+          style={{
+            border: ' 2px solid black',
+            height: 'auto',
+            width: 'auto',
+            overflow: 'hidden',
+            padding: '15px',
+          }}
+        >
+          OutPut :<br/>
+          {outPut}
+        </div>
       </div>
     </main>
   );
