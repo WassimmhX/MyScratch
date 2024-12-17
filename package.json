@@ -16,7 +16,6 @@
   },
   "proxy": "http://localhost:5000",
   "scripts": {
-    "start": "concurrently \"npm run start --prefix backend\" \"npm start --prefix frontend\"",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

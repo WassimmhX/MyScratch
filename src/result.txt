@@ -1,4 +1,3 @@
 		
-if (P==True)  then:
-	M = (5+5) 
-	print(done !)
+if (5+5)  then:
+	print(4444444)
