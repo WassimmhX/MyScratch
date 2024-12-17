@@ -64,4 +64,29 @@
     margin: 5px;
     cursor: pointer;
   }
-  
+  button {
+    background-color: #db1111; 
+    color: white;
+    border: none;
+    padding: 12px 24px; 
+    font-size: 16px; 
+    font-weight: bold;
+    border-radius: 8px; 
+    cursor: pointer; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    outline: none; 
+    margin: 5px;  
+  }
+
+  button:hover {
+    background-color: #da5d5d;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); 
+    transform: translateY(-2px); 
+  }
+
+  button:active {
+    background-color: #3e8e41;
+    transform: translateY(0px); 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+  }

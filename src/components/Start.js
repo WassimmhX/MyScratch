@@ -7,7 +7,7 @@ import BlockFor from './BlockFor';
 import { GlobalContext } from '../GlobalProvider';
 import Variable from './Variable';
 
-function Start({ color, cmpList }) {
+function Start({ color}) {
   const { globalVariable, setGlobalVariable } = useContext(GlobalContext);
 
   const [board, setBoard] = useState([]);
@@ -70,7 +70,7 @@ function Start({ color, cmpList }) {
   useEffect(() => {
     if (nbIf + nbIfElse + nbFor + nbImg + nbVar != 0) {
       setBoardHeight(
-        nbIf * 120 + nbIfElse * 180 + nbFor * 102 + nbImg * 29 + nbVar * 73
+        nbIf * 120 + nbIfElse * 180 + nbFor * 102 + nbImg * 63 + nbVar * 73
       );
     }
     console.log(nbIf, nbIfElse, nbFor, nbImg, boardHeight, nbVar);

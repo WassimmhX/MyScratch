@@ -1,0 +1,9 @@
+	
+			
+		
+if 		(5<7) 
+ then:
+	print:hello
+if 		(10<2) 
+ then:
+	print:wassim

@@ -25,7 +25,6 @@ function Operation() {
 
   const { globalVariable, setGlobalVariable } = useContext(GlobalContext);
   const[n1,setN1]=useState('')
-  const[n2,setN2]=useState('')
   useEffect(()=>{
     if(submittedValue1!=""){
       setGlobalVariable((g)=>g+'('+submittedValue1)

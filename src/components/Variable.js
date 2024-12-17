@@ -3,6 +3,7 @@ import { useDrag, useDrop } from 'react-dnd';
 import '../App.css';
 import { GlobalContext } from '../GlobalProvider';
 import Operation from './Operation';
+import Affect from './Affect';
 
 function Variable() {
 
@@ -21,7 +22,7 @@ function Variable() {
   );
 
   const [{ isOver: isOverVar }, dropVar] = useDrop(() => ({
-    accept: ['operation'],
+    accept: ['operation',"affect"],
     drop: (item) => addToBoard(item),
     collect: (monitor) => ({ isOver: !!monitor.isOver() }),
   }));
@@ -100,8 +101,9 @@ function Variable() {
           }}
         >
           {boardVar.map((item, index) => (
-            <Operation key={index} />
-          ))}
+            item.type === 'affect'? (<Operation key={index} />)
+            :<Affect key={index}/>)
+          )}
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import Cmp from './Cmp';
 import '../App.css';
 import DropBox from './DropBox';
@@ -9,12 +9,15 @@ import BlockIf from './BlockIf';
 import BlockIfElse from './BlockIfElse';
 import BlockFor from './BlockFor';
 import Variable from './Variable';
+import axios from 'axios';
+import { GlobalContext } from '../GlobalProvider';
+import Affect from './Affect';
 
-const CmpList = [
-  { id: 1, text: 'print' },
-];
-
+const filePath="C:/Users/Mega-PC/Desktop/informatique/compilation/projet/myScratchProject/src/result.txt"
+const pythonPath="C:/Users/Mega-PC/Desktop/informatique/compilation/projet/myScratchProject/src/main.py"
 function DragDrop() {
+  const [fileContent,setFileContent] = useState("")
+  const { globalVariable, setGlobalVariable } = useContext(GlobalContext);
   const boxRef = useRef(null);
   const containerRef = useRef(null);
   const isClicked = useRef(false);
@@ -56,12 +59,32 @@ function DragDrop() {
     };
     return cleanup;
   }, []);
-
+  const btn = async () => {
+    try {
+      
+      const response = await axios.post('http://localhost:5000/update-file', {
+        filePath,
+        newContent:globalVariable,
+      });
+      console.log(response.data.message);
+    } catch (error) {
+      console.error('Error fetching file:', error);
+      setFileContent('Error reading file. Please check the path.');
+    }
+  };
+  const compile = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/run-python', { filePath:pythonPath });
+      console.log(response.data.output);
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <main>
       <div className="container" ref={containerRef}>
         <div ref={boxRef} className="box" >
-          <Start color="red" cmpList={CmpList} />
+          <Start color="red" />
         </div>
       </div>
       <div
@@ -79,6 +102,9 @@ function DragDrop() {
         <BlockFor/>
         <Operation/>
         <Variable/>
+        <Affect/>
+        <button onClick={btn}>Save</button>
+        <button onClick={compile}>Compile</button>
       </div>
     </main>
   );

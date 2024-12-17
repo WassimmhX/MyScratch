@@ -105,7 +105,7 @@ function BlockIfElse({ nbImgStart, nbIfStart, nbIfElseStart, nbVarStart }) {
     }),
   }));
   useEffect(() => {
-    if (nbImgElse > 1) {
+    if (nbImgElse >= 1) {
       nbImgStart();
     }
   }, [nbImgElse]);
@@ -115,18 +115,18 @@ function BlockIfElse({ nbImgStart, nbIfStart, nbIfElseStart, nbVarStart }) {
     }
   }, [nbVarElse]);
   useEffect(() => {
-    if (nbImgIf > 1) {
+    if (nbImgIf >= 1) {
       nbImgStart();
     }
   }, [nbImgIf]);
 
   const boardHeightIf = boardIf.length === 0 ? 48 : boardIf.length * 48;
   const boardHeightThen =
-    boardThen.length === 0 ? 29 : nbImgIf * 29 + nbVarThen * 75;
+    boardThen.length === 0 ? 29 : nbImgIf * 63 + nbVarThen * 75;
   const boardHeightElse =
     boardElse.length === 0
       ? 29
-      : nbImgElse * 29 + nbIf * 120 + nbIfElse * 180 + nbVarElse * 75;
+      : nbImgElse * 63 + nbIf * 120 + nbIfElse * 180 + nbVarElse * 75;
   return (
     <div
       ref={drag}

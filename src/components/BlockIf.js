@@ -55,7 +55,7 @@ function BlockIf({ addCode, nbImgStart, nbVarStart }) {
     }
   },[nbImg,nbVar])
   const boardHeightIf = boardIf.length === 0 ? 48 : boardIf.length * 48;
-  const boardHeightThen = boardThen.length === 0 ? 29 : nbImg * 29 + nbVar * 75;
+  const boardHeightThen = boardThen.length === 0 ? 29 : nbImg * 63 + nbVar * 75;
 
   return (
     <div
