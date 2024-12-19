@@ -1,2 +1,8 @@
 		
-print("hello world")
+for I in (1, 5) do:
+	
+	print("h")
+
+	print("w")
+
+print("wassim")

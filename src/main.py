@@ -19,23 +19,23 @@ def code_to_statements(code):
                 continue
 
             # Detect the start of a block (e.g., if, for)
-            block_indentation = len(line) - len(line.strip())  # Set block indentation
             if stripped_line.endswith(":") or stripped_line.startswith("else:"):
+                block_indentation = len(line) - len(line.strip())  # Set block indentation
                 if current_statement:
                     statements.append(current_statement.strip())
                     current_statement = ""
                 statements.append(stripped_line)
             # Inside a block
             elif block_indentation is not None and (len(line) - len(line.strip())) >block_indentation:
-                current_statement += stripped_line + " "
+                current_statement += stripped_line + "#"
 
             # End of a block or standalone statement
             else:
                 if current_statement:
-                    statements.append(current_statement.strip())
+                    statements+=(current_statement.split("#"))
                     current_statement = ""
-                statements.append(stripped_line)
                 statements.append("end")
+                statements.append(stripped_line)
                 block_indentation = None
 
         # Append any remaining statement
@@ -230,18 +230,6 @@ def validate_and_execute(statement):
 
 # Return success only if no errors occurred
     return ""
-# Example input
-code = '''
-A = 6
-print("bonjour")
-print(A)
-if A == 6 then:
-    print("A est vrai")
-else:
-    print(A)
-for i in (3, 2) do
-    print("A=6")
-'''
 
 statements=code_to_statements(text)
 result = validate_and_execute(statements)
