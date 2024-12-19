@@ -72,17 +72,17 @@ function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart, nbVarStart
   }, [nbIf, nbIfElse, nbFor, nbImg, nbVar]);
   useEffect(() => {
     if (n1 != '') {
-      setGlobalVariable((g) => g + ' (' + submittedValue1 + ',');
+      setGlobalVariable((g) => g + '(' + submittedValue1 + ', ');
     }
   }, [submittedValue1]);
   useEffect(() => {
     if (n2 != '') {
-      setGlobalVariable((g) => g + submittedValue2 + ') :\n\t');
+      setGlobalVariable((g) => g + submittedValue2 + ') do:\n\t');
     }
   }, [submittedValue2]);
   useEffect(() => {
     if (iterator != '') {
-      setGlobalVariable((g) => g +  iterator + ' in range');
+      setGlobalVariable((g) => g +  iterator + ' in ');
     }
   }, [iterator]);
   
@@ -226,7 +226,7 @@ function BlockFor({ nbIfStart, nbIfElseStart, nbImgStart, nbForStart, nbVarStart
         }}
       >
         {boardFor.map((item, index) =>
-          item.type === 'BlockIf' ? (<BlockIf key={index} nbImgStart={nbImgStart} nbVarStart={nbVarStart}/>) 
+          item.type === 'BlockIf' ? (<BlockIf key={index} nbImgStart={nbImgStart} nbVarStart={nbVarStart} estFor={1}/>) 
             : item.type === 'BlockIfElse' ? (<BlockIfElse key={index} nbVarStart={nbVarStart} nbImgStart={nbImgStart} estFor={1} />) 
             : item.type === 'BlockFor' ? (<BlockFor key={index} nbIfStart={nbIfStart} nbImgStart={nbImgStart} />) 
             : item.type === 'variable' ? (<Variable key={index} />) 

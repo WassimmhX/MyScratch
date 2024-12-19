@@ -48,7 +48,7 @@ function BlockIf({ addCode, nbImgStart, nbVarStart ,estFor}) {
   }));
   useEffect(()=>{
     if (nbImg + nbVar === 1) {
-      setGlobalVariable((g) => g + ':\n'+tab);
+      setGlobalVariable((g) => g + ' then:\n'+tab);
     } else if (nbImg + nbVar > 1) {
       setGlobalVariable((g) => g + '\n'+tab);
     }

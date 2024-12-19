@@ -36,8 +36,6 @@ function DragDrop() {
         newContent:globalVariable,
       });
       console.log(response.data.message);
-      const response1 = await axios.post('http://localhost:5000/run-python', { filePath:pythonPath });
-      console.log(response1.data.output);
     } catch (error) {
       console.error('Error fetching file:', error);
       setFileContent('Error reading file. Please check the path.');
@@ -46,7 +44,7 @@ function DragDrop() {
   const compile = async () => {
     let response=""
     try {
-      response = await axios.post('http://localhost:5000/run-python', { filePath:codePath });
+      response = await axios.post('http://localhost:5000/run-python', { filePath:pythonPath });
       console.log(response.data.output);
       setOutPut(response.data.output);
     } catch (err) {
@@ -127,7 +125,7 @@ function DragDrop() {
           <b>OutPut :</b><br/>
           {outPut.split("\n").map((line, index) => (
             <React.Fragment key={index}>
-              {line}
+               {line}
               <br />
             </React.Fragment>
           ))
