@@ -13,10 +13,10 @@ import Affect from './Affect';
 
 const filePath = '../src/result.txt';
 const pythonPath = '../src/main.py';
-
+const codePath="../src/codeP.py"
 function DragDrop() {
   const [fileContent, setFileContent] = useState('');
-  const [outPut, setOutPut] = useState();
+  const [outPut, setOutPut] = useState("");
   const { globalVariable, setGlobalVariable } = useContext(GlobalContext);
   const boxRef = useRef(null);
   const containerRef = useRef(null);
@@ -33,23 +33,27 @@ function DragDrop() {
     try {
       const response = await axios.post('http://localhost:5000/update-file', {
         filePath,
-        newContent: globalVariable,
+        newContent:globalVariable,
       });
       console.log(response.data.message);
+      const response1 = await axios.post('http://localhost:5000/run-python', { filePath:pythonPath });
+      console.log(response1.data.output);
     } catch (error) {
       console.error('Error fetching file:', error);
       setFileContent('Error reading file. Please check the path.');
     }
   };
   const compile = async () => {
+    let response=""
     try {
-      const response = await axios.post('http://localhost:5000/run-python', {
-        filePath: pythonPath,
-      });
-      setOutPut(response.data.output);
+      response = await axios.post('http://localhost:5000/run-python', { filePath:codePath });
       console.log(response.data.output);
+      setOutPut(response.data.output);
     } catch (err) {
-      console.error(err);
+      console.log(err);
+      console.log(err.response.data.details);
+      setOutPut(err.response.data.details);
+
     }
   };
 
@@ -111,7 +115,7 @@ function DragDrop() {
         <button onClick={btnSave}>Save</button>
         <button onClick={compile}>Compile</button>
         <div
-          className="container"
+          
           style={{
             border: ' 2px solid black',
             height: 'auto',
@@ -120,8 +124,14 @@ function DragDrop() {
             padding: '15px',
           }}
         >
-          OutPut :<br/>
-          {outPut}
+          <b>OutPut :</b><br/>
+          {outPut.split("\n").map((line, index) => (
+            <React.Fragment key={index}>
+              {line}
+              <br />
+            </React.Fragment>
+          ))
+          }
         </div>
       </div>
     </main>

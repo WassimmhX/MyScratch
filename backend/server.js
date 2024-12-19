@@ -67,7 +67,7 @@ app.post('/read-file', (req, res) => {
     // Execute the Python file
     exec(`python3 ${resolvedPath}`, (err, stdout, stderr) => {
       if (err) {
-        return res.status(500).json({ error: 'Error executing Python script', details: err.message });
+        return res.status(500).json({ error: 'Error executing Python script', details: err.message.slice(err.message.indexOf("line"),-1) });
       }
   
       if (stderr) {

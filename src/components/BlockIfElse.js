@@ -6,11 +6,13 @@ import BlockIf from './BlockIf';
 import { GlobalContext } from '../GlobalProvider';
 import Variable from './Variable';
 
-function BlockIfElse({ nbImgStart, nbIfStart, nbIfElseStart, nbVarStart }) {
+function BlockIfElse({ nbImgStart, nbIfStart, nbIfElseStart, nbVarStart,estFor }) {
   const [boardIf, setBoardIf] = useState([]);
   const [boardThen, setBoardThen] = useState([]);
   const [boardElse, setBoardElse] = useState([]);
-
+  
+  const tab=estFor==1?"\t\t":'\t';
+  
   const [nbImgIf, setNbImgIf] = useState(0);
   const [nbImgElse, setNbImgElse] = useState(0);
   const [nbVarThen, setNbVarThen] = useState(0);
@@ -76,16 +78,16 @@ function BlockIfElse({ nbImgStart, nbIfStart, nbIfElseStart, nbVarStart }) {
 
   useEffect(() => {
     if (nbImgIf + nbVarThen === 1) {
-      setGlobalVariable((g) => g + 'then:\n\t');
+      setGlobalVariable((g) => g + ':\n'+tab);
     } else if (nbImgIf + nbVarThen > 1) {
-      setGlobalVariable((g) => g + '\n\t');
+      setGlobalVariable((g) => g + '\n'+tab);
     }
   }, [nbImgIf, nbVarThen]);
   useEffect(() => {
     if (nbImgElse + nbVarElse + nbIfElse + nbIf === 1) {
-      setGlobalVariable((g) => g + 'else:\n\t');
+      setGlobalVariable((g) => g + (estFor==1?"\t":"") + 'else:\n'+tab);
     } else {
-      setGlobalVariable((g) => g + '\t');
+      setGlobalVariable((g) => g + tab);
     }
   }, [nbImgElse, nbVarElse ]);
   useEffect(() => {

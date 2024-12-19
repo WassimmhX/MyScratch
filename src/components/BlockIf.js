@@ -5,9 +5,11 @@ import Cmp from './Cmp';
 import { GlobalContext } from '../GlobalProvider';
 import Variable from './Variable';
 
-function BlockIf({ addCode, nbImgStart, nbVarStart }) {
+function BlockIf({ addCode, nbImgStart, nbVarStart ,estFor}) {
   const [boardIf, setBoardIf] = useState([]);
   const [boardThen, setBoardThen] = useState([]);
+
+  const tab=estFor==1?"\t\t":'\t';
 
   const [nbImg, setNbImg] = useState(0);
   const [nbVar, setNbVar] = useState(0);
@@ -46,9 +48,9 @@ function BlockIf({ addCode, nbImgStart, nbVarStart }) {
   }));
   useEffect(()=>{
     if (nbImg + nbVar === 1) {
-      setGlobalVariable((g) => g + ' then:\n\t');
+      setGlobalVariable((g) => g + ':\n'+tab);
     } else if (nbImg + nbVar > 1) {
-      setGlobalVariable((g) => g + '\n\t');
+      setGlobalVariable((g) => g + '\n'+tab);
     }
   },[nbImg,nbVar])
   const boardHeightIf = boardIf.length === 0 ? 48 : boardIf.length * 48;
